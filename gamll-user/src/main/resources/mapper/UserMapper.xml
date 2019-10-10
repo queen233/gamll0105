@@ -6,7 +6,7 @@
 <!-- SQL映射文件 -->
 <mapper namespace="com.bdqn.gamll.user.mapper.UserMapper">
 
-    <select id="selectALlUser" resultType="com.bdqn.gamll.user.bean.UmsMember">
+    <select id="selectALlUser" resultType="com.bdqn.gamll.bean.UmsMember">
          select t.* from ums_member t
     </select>
 </mapper>

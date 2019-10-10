@@ -1,8 +1,8 @@
 package com.bdqn.gamll.user.controll;
 
-import com.bdqn.gamll.user.bean.UmsMember;
-import com.bdqn.gamll.user.bean.UmsMemberReceiveAddress;
-import com.bdqn.gamll.user.service.UserService;
+import com.bdqn.gamll.bean.UmsMember;
+import com.bdqn.gamll.bean.UmsMemberReceiveAddress;
+import com.bdqn.gamll.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,10 +24,10 @@ public class UserController {
         return umsMemberReceiveAddresses;
     }
 
-    @RequestMapping("getUserALl")
+    @RequestMapping("getUserAll")
     @ResponseBody
-    public List<UmsMember> getUserALl(){
-        List<UmsMember> umsMembers = userService.getUserALl();
+    public List<UmsMember> getUserAll(){
+        List<UmsMember> umsMembers = userService.getUserAll();
         return umsMembers;
     }
 

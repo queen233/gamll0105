@@ -1,4 +1,4 @@
-package com.bdqn.gamll.user.bean;
+package com.bdqn.gamll.bean;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

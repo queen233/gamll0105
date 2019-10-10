@@ -1,10 +1,10 @@
 package com.bdqn.gamll.user.service.impl;
 
-import com.bdqn.gamll.user.bean.UmsMember;
-import com.bdqn.gamll.user.bean.UmsMemberReceiveAddress;
+import com.bdqn.gamll.bean.UmsMember;
+import com.bdqn.gamll.bean.UmsMemberReceiveAddress;
+import com.bdqn.gamll.service.UserService;
 import com.bdqn.gamll.user.mapper.UmsMemberReceiveAddressMapper;
 import com.bdqn.gamll.user.mapper.UserMapper;
-import com.bdqn.gamll.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     UmsMemberReceiveAddressMapper umsMemberReceiveAddressMapper;
 
     @Override
-    public List<UmsMember> getUserALl() {
+    public List<UmsMember> getUserAll() {
         List<UmsMember> umsMemberList = userMapper.selectAll();//userMapper.selectALlUser();
         return umsMemberList;
     }
