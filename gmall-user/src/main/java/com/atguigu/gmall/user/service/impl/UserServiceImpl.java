@@ -11,15 +11,16 @@ import org.springframework.stereotype.Service;
 import com.atguigu.gmall.service.UserService;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
+    @Resource
     UserMapper userMapper;
 
-    @Autowired
+    @Resource
     UmsMemberReceiveAddressMapper umsMemberReceiveAddressMapper;
 
     @Override
