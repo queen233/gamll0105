@@ -75,6 +75,7 @@ public class AttrServiceImpl implements AttrService {
 
             //删除后将新的属性值插入
             for (PmsBaseAttrValue pmsBaseAttrValue : attrValueList) {
+                pmsBaseAttrValue.setAttrId(id);
                 pmsBaseAttrValueMapper.insertSelective(pmsBaseAttrValue);
             }
         }
