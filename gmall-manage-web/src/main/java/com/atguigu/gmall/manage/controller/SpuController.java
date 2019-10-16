@@ -2,6 +2,7 @@ package com.atguigu.gmall.manage.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.atguigu.gmall.bean.PmsProductInfo;
+import com.atguigu.gmall.manage.util.PmsUploadUtil;
 import com.atguigu.gmall.service.SpuService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +19,10 @@ public class SpuController {
 
     @RequestMapping("fileUpload")
     @ResponseBody
-    public String fileUpload(@RequestParam("file") MultipartFile multipartFile){
-        return "success";
+    public String fileUpload(@RequestParam("file") MultipartFile multipartFile) {
+        String imgUrl=PmsUploadUtil.uploadImage(multipartFile);
+        System.out.println(imgUrl);
+        return imgUrl;
     }
 
     @RequestMapping("saveSpuInfo")
