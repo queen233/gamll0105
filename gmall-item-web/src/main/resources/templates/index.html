@@ -26,6 +26,11 @@
 
        <a th:href="'javascript:a(\''+${hello}+'\')'">点一下</a>
 
+       <a href="javascript:a('abc')">点我</a>
+
+       <!--页面引入-->
+       <div th:include="indexinner::innerPart">被引入的页面</div>
+
 <script language="JavaScript">
     function a(hello) {
         alert("js函数被调用："+hello);
