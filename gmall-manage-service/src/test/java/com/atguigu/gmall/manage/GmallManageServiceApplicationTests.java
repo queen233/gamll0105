@@ -15,9 +15,13 @@ import javax.annotation.Resource;
 public class GmallManageServiceApplicationTests {
 
 
+    @Autowired
+    RedisUtil redisUtil;
+
     @Test
     public void contextLoads() {
-
+        Jedis jedis = redisUtil.getJedis();
+        System.out.println(jedis);
     }
 
 }
