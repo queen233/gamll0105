@@ -23,9 +23,12 @@ public class RedissonController {
     @RequestMapping("testRedisson")
     @ResponseBody
     public String testRedisson(){
+
         Jedis jedis = redisUtil.getJedis();
+
         RLock lock = redissonClient.getLock("lock");// 声明锁
-        lock.lock();//上锁
+        lock.lock(); //上锁
+
         try {
             String v = jedis.get("k");
             if (StringUtils.isBlank(v)) {
