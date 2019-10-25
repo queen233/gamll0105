@@ -7,7 +7,7 @@ import java.util.List;
 public class PmsSearchSkuInfo {
 
     @Id
-    private String id;
+    private Long id;
     private String skuName;
     private String skuDesc;
     private String catalog3Id;
@@ -17,11 +17,11 @@ public class PmsSearchSkuInfo {
     private String productId;
     private List<PmsSkuAttrValue> skuAttrValueList;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
