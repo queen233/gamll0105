@@ -28,23 +28,57 @@ import java.util.List;
 public class GmallSearchServiceApplicationTests {
 
     @Reference
-    SkuService skuService;//查询mysql
+    SkuService skuService;// 查询mysql
+
 
     @Autowired
     JestClient jestClient;
 
     @Test
     public void contextLoads() throws IOException {
+        put();
+    }
+
+    public void put() throws IOException {
+
+        // 查询mysql数据
+        List<PmsSkuInfo> pmsSkuInfoList = new ArrayList<>();
+
+        pmsSkuInfoList = skuService.getAllSku("61");
+
+        // 转化为es的数据结构
+        List<PmsSearchSkuInfo> pmsSearchSkuInfos = new ArrayList<>();
+
+        for (PmsSkuInfo pmsSkuInfo : pmsSkuInfoList) {
+            PmsSearchSkuInfo pmsSearchSkuInfo = new PmsSearchSkuInfo();
+
+            BeanUtils.copyProperties(pmsSkuInfo, pmsSearchSkuInfo);
+
+            pmsSearchSkuInfo.setId(Long.parseLong(pmsSkuInfo.getId()));
+
+            pmsSearchSkuInfos.add(pmsSearchSkuInfo);
+
+        }
+
+        // 导入es
+        for (PmsSearchSkuInfo pmsSearchSkuInfo : pmsSearchSkuInfos) {
+            Index put = new Index.Builder(pmsSearchSkuInfo).index("gmall0105").type("PmsSkuInfo").id(pmsSearchSkuInfo.getId() + "").build();
+            jestClient.execute(put);
+        }
+
+    }
+
+    public void get() throws IOException {
 
         // jest的dsl工具
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         // bool
         BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
         // filter
-        TermQueryBuilder termQueryBuilder = new TermQueryBuilder("skuAttrValueList.valueId","43");
+        TermQueryBuilder termQueryBuilder = new TermQueryBuilder("skuAttrValueList.valueId", "43");
         boolQueryBuilder.filter(termQueryBuilder);
         // must
-        MatchQueryBuilder matchQueryBuilder = new MatchQueryBuilder("skuName","华为");
+        MatchQueryBuilder matchQueryBuilder = new MatchQueryBuilder("skuName", "华为");
         boolQueryBuilder.must(matchQueryBuilder);
         // query
         searchSourceBuilder.query(boolQueryBuilder);
@@ -52,6 +86,8 @@ public class GmallSearchServiceApplicationTests {
         searchSourceBuilder.from(0);
         // size
         searchSourceBuilder.size(20);
+        // highlight
+        searchSourceBuilder.highlight();
 
         String dslStr = searchSourceBuilder.toString();
 
@@ -74,34 +110,6 @@ public class GmallSearchServiceApplicationTests {
         }
 
         System.out.println(pmsSearchSkuInfos.size());
-
-    }
-
-    public void put() throws IOException {
-        // 查询mysql数据
-        List<PmsSkuInfo> pmsSkuInfoList = new ArrayList<>();
-
-        pmsSkuInfoList = skuService.getAllSku("66");
-
-        // 转化为es的数据结构
-        List<PmsSearchSkuInfo> pmsSearchSkuInfos = new ArrayList<>();
-
-        for (PmsSkuInfo pmsSkuInfo : pmsSkuInfoList) {
-            PmsSearchSkuInfo pmsSearchSkuInfo = new PmsSearchSkuInfo();
-
-            BeanUtils.copyProperties(pmsSkuInfo,pmsSearchSkuInfo);
-
-            pmsSearchSkuInfo.setId(Long.parseLong(pmsSkuInfo.getId()));
-
-            pmsSearchSkuInfos.add(pmsSearchSkuInfo);
-
-        }
-
-        // 导入es
-        for (PmsSearchSkuInfo pmsSearchSkuInfo : pmsSearchSkuInfos) {
-            Index put = new Index.Builder(pmsSearchSkuInfo).index("gmall0105").type("PmsSkuInfo").id(pmsSearchSkuInfo.getId()+"").build();
-            jestClient.execute(put);
-        }
     }
 
 }

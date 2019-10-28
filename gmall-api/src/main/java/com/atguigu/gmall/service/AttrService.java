@@ -6,6 +6,7 @@ import com.atguigu.gmall.bean.PmsBaseSaleAttr;
 import com.atguigu.gmall.bean.PmsProductSaleAttr;
 
 import java.util.List;
+import java.util.Set;
 
 public interface AttrService {
 
@@ -17,4 +18,6 @@ public interface AttrService {
 
 
     List<PmsBaseSaleAttr> baseSaleAttrList();
+
+    List<PmsBaseAttrInfo> getAttrValueListByValueId(Set<String> valueIdSet);
 }
