@@ -1,5 +1,8 @@
 package com.atguigu.gmall.bean;
 
+import com.atguigu.gmall.bean.PmsProductImage;
+import com.atguigu.gmall.bean.PmsProductSaleAttr;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -26,9 +29,10 @@ public class PmsProductInfo implements Serializable {
     private  String catalog3Id;
 
     @Transient
-    private List<PmsProductSaleAttr> spuSaleAttrList ;
+    private List<PmsProductSaleAttr> spuSaleAttrList;
+
     @Transient
-    private List<PmsProductImage> spuImageList ;
+    private List<PmsProductImage> spuImageList;
 
 
     public String getProductName() {

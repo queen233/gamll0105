@@ -1,8 +1,6 @@
 package com.atguigu.gmall.bean;
 
-import com.atguigu.gmall.bean.PmsSkuAttrValue;
-import com.atguigu.gmall.bean.PmsSkuImage;
-import com.atguigu.gmall.bean.PmsSkuSaleAttrValue;
+
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,41 +17,36 @@ public class PmsSkuInfo implements Serializable {
     @Id
     @Column
     String id;
-
     @Column
     String productId;
-
     @Transient
     String spuId;
-
     @Column
     BigDecimal price;
-
     @Column
     String skuName;
-
     @Column
     BigDecimal weight;
-
     @Column
     String skuDesc;
-
     @Column
     String catalog3Id;
-
     @Column
     String skuDefaultImg;
-
     @Transient
     List<PmsSkuImage> skuImageList;
-
     @Transient
     List<PmsSkuAttrValue> skuAttrValueList;
-
     @Transient
     List<PmsSkuSaleAttrValue> skuSaleAttrValueList;
 
+    public String getSpuId() {
+        return spuId;
+    }
 
+    public void setSpuId(String spuId) {
+        this.spuId = spuId;
+    }
 
     public String getId() {
         return id;
@@ -141,13 +134,5 @@ public class PmsSkuInfo implements Serializable {
 
     public void setSkuSaleAttrValueList(List<PmsSkuSaleAttrValue> skuSaleAttrValueList) {
         this.skuSaleAttrValueList = skuSaleAttrValueList;
-    }
-
-    public String getSpuId() {
-        return spuId;
-    }
-
-    public void setSpuId(String spuId) {
-        this.spuId = spuId;
     }
 }

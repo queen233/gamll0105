@@ -129,8 +129,6 @@ public class SkuServiceImpl implements SkuService {
                     //jedis.eval("lua");可与用lua脚本，在查询到key的同时删除该key，防止高并发下的意外的发生
                     jedis.del("sku:" + skuId + ":lock");// 用token确认删除的是自己的sku的锁
                 }
-
-
             }else{
                 // 设置失败，自旋（该线程在睡眠几秒后，重新尝试访问本方法）
                 System.out.println("ip为"+ip+"的同学:"+Thread.currentThread().getName()+"没有拿到锁，开始自旋");
@@ -152,7 +150,6 @@ public class SkuServiceImpl implements SkuService {
 
     @Override
     public List<PmsSkuInfo> getAllSku(String catalog3Id) {
-
         List<PmsSkuInfo> pmsSkuInfos = pmsSkuInfoMapper.selectAll();
 
         for (PmsSkuInfo pmsSkuInfo : pmsSkuInfos) {
