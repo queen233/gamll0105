@@ -2,12 +2,14 @@ package com.atguigu.gmall.cart.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.nacos.client.utils.StringUtils;
 import com.atguigu.gmall.bean.OmsCartItem;
 import com.atguigu.gmall.bean.PmsSkuInfo;
+import com.atguigu.gmall.service.CartService;
 import com.atguigu.gmall.service.SkuService;
 import com.atguigu.gmall.util.CookieUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,10 +27,54 @@ public class CartController {
     SkuService skuService;
 
     @Reference
-    //CartService cartService;
+    CartService cartService;
+
+    @RequestMapping("checkCart")
+    public String checkCart(String isChecked, String skuId, HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap) {
+
+        String memberId = "1";
+
+        // 调用服务，修改状态
+        OmsCartItem omsCartItem = new OmsCartItem();
+        omsCartItem.setMemberId(memberId);
+        omsCartItem.setProductSkuId(skuId);
+        omsCartItem.setIsChecked(isChecked);
+        cartService.checkCart(omsCartItem);
+
+        // 将最新的数据从缓存中查出，渲染给内嵌页
+        List<OmsCartItem> omsCartItems = cartService.cartList(memberId);
+        modelMap.put("cartList", omsCartItems);
+        return "cartListInner";
+    }
+
+
+    @RequestMapping("cartList")
+    public String cartList(HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap) {
+
+        List<OmsCartItem> omsCartItems = new ArrayList<>();
+        String memberId = "1";
+
+        if (StringUtils.isNotBlank(memberId)) {
+            // 已经登录查询db
+            omsCartItems = cartService.cartList(memberId);
+        } else {
+            // 没有登录查询cookie
+            String cartListCookie = CookieUtil.getCookieValue(request, "cartListCookie", true);
+            if (StringUtils.isNotBlank(cartListCookie)) {
+                omsCartItems = JSON.parseArray(cartListCookie, OmsCartItem.class);
+            }
+        }
+
+        for (OmsCartItem omsCartItem : omsCartItems) {
+            omsCartItem.setTotalPrice(omsCartItem.getPrice().multiply(omsCartItem.getQuantity()));
+        }
+
+        modelMap.put("cartList", omsCartItems);
+        return "cartList";
+    }
 
     @RequestMapping("addToCart")
-    public String addToCart(String skuId, int quantity, HttpServletRequest request, HttpServletResponse response, HttpSession session){
+    public String addToCart(String skuId, int quantity, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
         List<OmsCartItem> omsCartItems = new ArrayList<>();
 
         // 调用商品服务查询商品信息
@@ -49,7 +95,6 @@ public class CartController {
         omsCartItem.setProductSkuCode("11111111111");
         omsCartItem.setProductSkuId(skuId);
         omsCartItem.setQuantity(new BigDecimal(quantity));
-
 
         // 判断用户是否登录
         String memberId = "1";//"1";
@@ -79,31 +124,28 @@ public class CartController {
                     omsCartItems.add(omsCartItem);
                 }
             }
-
             // 更新cookie
             CookieUtil.setCookie(request, response, "cartListCookie", JSON.toJSONString(omsCartItems), 60 * 60 * 72, true);
         } else {
             // 用户已经登录
             // 从db中查出购物车数据
-            /*OmsCartItem omsCartItemFromDb = cartService.ifCartExistByUser(memberId,skuId);
+            OmsCartItem omsCartItemFromDb = cartService.ifCartExistByUser(memberId, skuId);
 
-            if(omsCartItemFromDb==null){
+            if (omsCartItemFromDb == null) {
                 // 该用户没有添加过当前商品
                 omsCartItem.setMemberId(memberId);
                 omsCartItem.setMemberNickname("test小明");
                 omsCartItem.setQuantity(new BigDecimal(quantity));
                 cartService.addCart(omsCartItem);
 
-            }else{
+            } else {
                 // 该用户添加过当前商品
                 omsCartItemFromDb.setQuantity(omsCartItemFromDb.getQuantity().add(omsCartItem.getQuantity()));
                 cartService.updateCart(omsCartItemFromDb);
             }
-
             // 同步缓存
-            cartService.flushCartCache(memberId);*/
+            cartService.flushCartCache(memberId);
         }
-
         return "redirect:/success.html";
     }
 
