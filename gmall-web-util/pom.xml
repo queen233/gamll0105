@@ -15,19 +15,22 @@
     </parent>
 
     <dependencies>
+
         <dependency>
             <groupId>com.atguigu.gmall</groupId>
             <artifactId>gmall-common-util</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
+        <!-- springboot亲儿子thymeleaf -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
 
-        <!--thymeleaf支持包-->
+
+        <!-- thymeleaf支持包、可以设置松校验、热部署 -->
         <dependency>
             <groupId>net.sourceforge.nekohtml</groupId>
             <artifactId>nekohtml</artifactId>
@@ -43,8 +46,16 @@
             <artifactId>batik-ext</artifactId>
         </dependency>
 
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.0</version>
+        </dependency>
+
+
+
     </dependencies>
-    
 
 
 </project>
